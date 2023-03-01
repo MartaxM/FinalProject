@@ -1,0 +1,17 @@
+{
+  "name": "finalprojectwebdev",
+  "version": "1.0.0",
+  "description": "Final project for Advanced Web Applications",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "cd server && npm start",
+    "install": "cd client && npm install",
+    "dev:client": "cd client && npm start",
+    "preinstall": "cd server && npm install",
+    "dev:server": "cd server && npm run dev",
+    "build": "cd client && npm run build"
+  },
+  "author": "Marta Xiaoyang Moraga Hernández",
+  "license": "ISC"
+}
