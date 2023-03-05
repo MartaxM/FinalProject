@@ -11,6 +11,9 @@ import CreatePost from './components/CreatePost';
 import { purple, blue, grey } from '@mui/material/colors';
 import { ThemeProvider, createTheme, responsiveFontSizes } from '@mui/material/styles';
 
+/**
+ * Set theme, that way everything share colors and other things
+ */
 let theme = createTheme({
   palette: {
     primary: {
@@ -21,10 +24,17 @@ let theme = createTheme({
     },
   },
 });
+
+/**
+ * Typography custom variants
+ */
 theme.typography.title = {
   fontSize: '3.7rem',
   color: purple[700],
   fontWeight: "bold",
+  /**
+   * Title is very big, so I set some changes if the screen is smaller
+   * */
   [theme.breakpoints.down('md')]: {
     fontSize: '3.3rem',
   },
@@ -42,9 +52,22 @@ theme.typography.greytext = {
   color: grey[600],
 };
 
-
+// Set responsive FontSizes to the theme
 theme = responsiveFontSizes(theme);
 
+/**
+ * 
+ * @returns the app
+ * ThemeProvider sets the theme for everything inside
+ * Header appears in all pages
+ * The deffined routes are:
+ * 
+ *  / -> Index where the posts appear
+ *  /login -> to log in
+ *  /register -> To register
+ *  /post/:post_id -> lets user see the details of a post and its comments
+ *  /write -> to write a post
+ */
 function App() {
   return (
     <Suspense fallback="loading">

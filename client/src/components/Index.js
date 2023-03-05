@@ -3,10 +3,18 @@ import Post from './Post'
 import '../App.css';
 import { Typography, Box } from "@mui/material";
 
+/**
+ * 
+ * @returns Index component, acts as the homepage where the posts are shown
+ */
+
 function Index() {
 
     const [posts, setPost] = useState(null);
 
+    /**
+     * To fetch the posts
+     */
     useEffect(() => {
         let mounted = true;
         async function fetchPost() {
@@ -16,6 +24,7 @@ function Index() {
                     console.log(e);
                 })
             if (mounted) {
+                //Create a list of Post Components to show
                 let post_list = res.slice(0).reverse().map((post) => {
                     return <Post key={post._id}
                         post_id={post._id}
@@ -25,6 +34,7 @@ function Index() {
                         code={post.code}
                     />
                 })
+                //sets the posts
                 setPost(post_list)
             }
         }
@@ -36,7 +46,7 @@ function Index() {
 
     return (
         <Box>
-            <Typography variant="title">Our Posts</Typography>
+            <Typography variant="title">Posts</Typography>
             <Box>
                 {posts}
             </Box>

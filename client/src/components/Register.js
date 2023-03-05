@@ -1,10 +1,14 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom"
-import { TextField, Button, Box } from "@mui/material";
+import { TextField, Button, Box, Alert,Typography } from "@mui/material";
 
+/**
+ * @returns Register Component, which is a form to register
+ */
 function Register() {
-
     let navigate = useNavigate();
+    //Alert to show if register was incorrect
+    const [alert, setAlert] = useState();
 
     const [user, setUser] = useState({
         username: "",
@@ -12,6 +16,7 @@ function Register() {
         password: ""
     });
 
+    //Functions to handle changes to the TextFields
     function handleEmailChange(e) {
         setUser({
             ...user,
@@ -33,7 +38,8 @@ function Register() {
         });
     }
 
-    const registerUser = () => {
+    //Function to call the api to register
+    const registerUser = async () => {
 
         const requestOptions = {
             method: 'POST',
@@ -45,23 +51,26 @@ function Register() {
             }),
             mode: "cors"
         }
-        fetch('/api/user/register', requestOptions)
-            .then(response => {
-                if (response.ok) {
-                    navigate("/login");
-                }
-            })
+        let res = await fetch('/api/user/register', requestOptions)
+        if (!res.ok) {
+            let msg = await res.json();
+            //If registering was not possible, show why
+            setAlert(<Alert severity="warning">{msg.msg}</Alert>);
+        } else {
+            //else, navigate to login
+            navigate("/login")
+        }
     }
 
-
     const onSubmit = (e) => {
-
         e.preventDefault();
         registerUser();
     }
 
     return (
-        <Box component="form" sx={{ width: '80%', maxWidth: 'sm',m:"auto" }} onSubmit={onSubmit}>
+    <>
+        <Typography variant="title">Register</Typography>
+        <Box component="form" sx={{ width: '80%', maxWidth: 'sm', m: "auto" }} onSubmit={onSubmit}>
             <TextField required
                 margin="normal"
                 fullWidth
@@ -83,8 +92,10 @@ function Register() {
                 placeholder="Password"
                 type="password" value={user.password}
                 onChange={handlePasswordChange}></TextField>
+            {alert}
             <Button variant="contained" className="center-align" type="submit">Register</Button>
         </Box>
+    </>
     );
 }
 
