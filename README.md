@@ -1,4 +1,5 @@
 # FinalProject
 Moraga Hernández, Marta Xiaoyang
 
-Info on Documentation.pdf
+The documentation is on Documentation.pdf
+Download repository as zip and extract
