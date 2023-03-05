@@ -3,6 +3,7 @@ import AppBar from '@mui/material/AppBar'
 import Button from '@mui/material/Button'
 import { Box, Toolbar } from '@mui/material';
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 /**
  * 
  * @returns Header Component
@@ -14,7 +15,7 @@ import { useEffect, useState } from "react";
  */
 const Header = () => {
     const [logged, setLogged] = useState(false);
-
+    let navigate = useNavigate();
     /**
      * UseEffect to check if logged_in
      *  */ 
@@ -30,7 +31,6 @@ const Header = () => {
                     console.log(e);
                 })
             if (mounted) {
-                console.log(res.ok)
                 // Set logged state to the state of the response
                 setLogged(res.ok)
             }
@@ -40,17 +40,22 @@ const Header = () => {
         return () => { mounted = false; };
     }, [])
 
+
     /**
      * 
      * @param {*} e event
      * 
      * Logout function, activated when logout pressed
+     * After logout, go to login page
      */
     const logOut = async (e) => {
         e.preventDefault();
         let res = await fetch("/api/user/logout", { method: 'POST' })
 
-        if (res.ok) { window.location.reload(true) }
+        if (res.ok) { 
+            navigate("/login")
+            window.location.reload(true) 
+        }
     }
 
     /**

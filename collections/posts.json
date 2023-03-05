@@ -1,0 +1,83 @@
+[{
+  "_id": {
+    "$oid": "640379fe00444e986f7505d2"
+  },
+  "post_user": {
+    "$oid": "64036ad114cd397e43931f4c"
+  },
+  "title": "Simple loop",
+  "text": "Example of a simple loop in C++",
+  "code": "for(int = 0, i<5, i++) { counter++ }",
+  "comments": [
+    {
+      "$oid": "64037a2700444e986f7505d8"
+    },
+    {
+      "$oid": "6404bd281cbfabad1566ec48"
+    },
+    {
+      "$oid": "6404bd491cbfabad1566ec5b"
+    },
+    {
+      "$oid": "6404df575b31d050660a06a3"
+    }
+  ],
+  "__v": 17
+},{
+  "_id": {
+    "$oid": "6403c511948bc325f5e8ef43"
+  },
+  "post_user": {
+    "$oid": "64036ad114cd397e43931f4c"
+  },
+  "title": "My second post",
+  "text": "assigning a constant in C++",
+  "code": "const int NUMBER = 0",
+  "comments": [
+    {
+      "$oid": "6404df4a5b31d050660a067a"
+    }
+  ],
+  "__v": 1
+},{
+  "_id": {
+    "$oid": "6404bf0f1cbfabad1566ec9b"
+  },
+  "post_user": {
+    "$oid": "6403c5ca948bc325f5e8ef47"
+  },
+  "title": "Problems with JS",
+  "text": "Trying to make my server and I don't know why it doesn't compile\nThis is my code",
+  "code": "app.get('/api/user/logged_in', checkAuthenticated, () => {\n    res.sendStatus(200)\n})",
+  "comments": [
+    {
+      "$oid": "6404bf3d1cbfabad1566ecbf"
+    }
+  ],
+  "__v": 1
+},{
+  "_id": {
+    "$oid": "6404dfd15b31d050660a06b7"
+  },
+  "post_user": {
+    "$oid": "6404de8d5b31d050660a0637"
+  },
+  "title": "Example of fetch request",
+  "text": "Some seems to be struggling with this so here we go, simple example",
+  "code": "let res = await fetch(\"/api/user/logged_in\")\n.catch((e) => {console.log(e);})",
+  "comments": [
+    {
+      "$oid": "6404dffd5b31d050660a06c3"
+    },
+    {
+      "$oid": "6404e0285b31d050660a06f6"
+    },
+    {
+      "$oid": "6404e0505b31d050660a078d"
+    },
+    {
+      "$oid": "6404e0835b31d050660a07c6"
+    }
+  ],
+  "__v": 4
+}]

@@ -7,6 +7,7 @@ var cors = require('cors');
 const bcrypt = require('bcrypt')
 const passport = require('passport')
 const session = require('express-session')
+const { body, validationResult } = require("express-validator");
 const bodyParser = require('body-parser')
 var router = express.Router();
 
@@ -66,13 +67,13 @@ app.use(session({
 
 /**
  * Use the sessions from passport
- *  */ 
+ *  */
 app.use(passport.initialize())
 app.use(passport.session())
 
 /**
  * mongoose settings
- *  */ 
+ *  */
 const mongoDB = "mongodb://127.0.0.1:27017/finalproject";
 mongoose.connect(mongoDB);
 mongoose.Promise = Promise;
@@ -81,7 +82,7 @@ db.on('error', console.error.bind(console, "MongoDB connection error"));
 
 /**
  * Import Schemas
- *  */ 
+ *  */
 const User = require("./models/User");
 const Post = require("./models/Post");
 const Comment = require("./models/Comment");
@@ -116,39 +117,52 @@ function checkAuthenticated(req, res, next) {
  * Does not allow repeated usernames or emails
  * Uses mongoose functions
  */
-app.post('/api/user/register', async (req, res, next) => {
-    try {
-        //Hash password
-        const hashedPassword = await bcrypt.hash(req.body.password, 10);
-        //Find if an user exists with that email or username
-        User.findOne({ $or: [{ email: req.body.email }, { username: req.body.username }] }).lean()
-            .then((foundUser) => {
-                //If the user is found, do not create user, send error message
-                if (foundUser) {
-                    if (foundUser.email === req.body.email) {
-                        res.status(403).send({msg:'Email in use'});
+app.post('/api/user/register',
+    body('password').isStrongPassword({
+        minLength: 8,
+        minLowercase: 1,
+        minUppercase: 1,
+        minNumbers: 1,
+        minSymbols: 1
+    }),
+    async (req, res, next) => {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(403).send(
+                { msg: "Weak password. It should be 8 characters long, and include at least: 1 Uppercase, 1 Lowercase, 1 Number, 1 Symbol" });
+        }
+        try {
+            //Hash password
+            const hashedPassword = await bcrypt.hash(req.body.password, 10);
+            //Find if an user exists with that email or username
+            User.findOne({ $or: [{ email: req.body.email }, { username: req.body.username }] }).lean()
+                .then((foundUser) => {
+                    //If the user is found, do not create user, send error message
+                    if (foundUser) {
+                        if (foundUser.email === req.body.email) {
+                            res.status(403).send({ msg: 'Email in use' });
+                        }
+                        else {
+                            res.status(403).send({ msg: 'Username in use' });
+                        }
+                    } else {
+                        //Else, create user
+                        User.create({
+                            username: req.body.username,
+                            email: req.body.email,
+                            password: hashedPassword
+                        });
+                        res.sendStatus(200);
                     }
-                    else {
-                        res.status(403).send({msg:'Username in use'});
-                    }
-                } else {
-                    //Else, create user
-                    User.create({
-                        username: req.body.username,
-                        email: req.body.email,
-                        password: hashedPassword
-                    });
-                    res.sendStatus(200);
-                }
-            })
-            .catch((error) => {
-                console.log(error);
-                res.status(400).send("Bad request");
-            });
-    } catch {
-        res.status(500).send("Something went wrong");
-    }
-})
+                })
+                .catch((error) => {
+                    console.log(error);
+                    res.status(400).send("Bad request");
+                });
+        } catch {
+            res.status(500).send("Something went wrong");
+        }
+    })
 
 /**
  * LOGIN
@@ -356,25 +370,18 @@ app.get('/api/posts', (req, res, next) => {
  * If there is not a variable set, production is the default
  */
 
-if (process.env.NODE_ENV === "production") {
-    app.use(express.static(path.resolve("..", "client", "build")));
-    app.get("/*", (req, res) =>
-        res.sendFile(path.resolve("..", "client", "build", "index.html"))
-    );
-} else if (process.env.NODE_ENV === "development") {
+if (process.env.NODE_ENV === "development") {
     //cors options so that frontend can access
     var corsOptions = {
         origin: "http://localhost:3000",
         optionsSuccessStatus: 200,
     };
     app.use(cors(corsOptions));
-
+} else {
+    app.use(express.static(path.resolve("..", "client", "build")));
+    app.get("/*", (req, res) =>
+        res.sendFile(path.resolve("..", "client", "build", "index.html"))
+    );
 }
-
-var corsOptions = {
-    origin: "http://localhost:3000",
-    optionsSuccessStatus: 200,
-};
-app.use(cors(corsOptions));
 
 module.exports = app;
