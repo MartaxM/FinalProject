@@ -16,7 +16,7 @@ function Index() {
                     console.log(e);
                 })
             if (mounted) {
-                let post_list = res.map((post) => {
+                let post_list = res.slice(0).reverse().map((post) => {
                     return <Post key={post._id}
                         post_id={post._id}
                         title={post.title}
