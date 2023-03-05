@@ -119,7 +119,7 @@ app.post('/api/user/register', async (req, res, next) => {
 
 //LOGIN
 app.post('/api/user/login', passport.authenticate('local', {}), (req, res) => {
-    console.log(req.session.passport.user);
+    //console.log(req.session.passport.user);
     res.sendStatus(200)
 });
 
@@ -147,7 +147,7 @@ app.post('/api/post/create', checkAuthenticated, (req, res, next) => {
         }).then(
             (postCreated) => {
                 if (postCreated) {
-                    res.status(200).send("Post created")
+                    res.status(200).send({post_id: postCreated._id.toString()})
                 }
             }
         ).catch((err) => {
@@ -189,7 +189,6 @@ app.post('/api/post/:post_id/comment/create', checkAuthenticated, (req, res, nex
 })
 
 //GET POST DETAILS
-
 app.get('/api/post/:post_id/details', (req, res, next) => {
     try {
         Post.findById(req.params.post_id)
@@ -200,7 +199,7 @@ app.get('/api/post/:post_id/details', (req, res, next) => {
                     path: 'comment_user',
                     select: "username -_id"
                 },
-                select: "text -_id"
+                select: "text"
             }).populate({
                 path: 'post_user',
                 select: "username -_id"
@@ -221,10 +220,9 @@ app.get('/api/post/:post_id/details', (req, res, next) => {
 })
 
 // GET ALL POSTS
-
 app.get('/api/posts', (req, res, next) => {
     try {
-        Post.find().select("-_id -__v -comments").populate(
+        Post.find().select("-__v -comments").populate(
             {
                 path: "post_user",
                 select: "username -_id"
