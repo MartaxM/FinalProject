@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom"
+import { TextField, Button, Box } from "@mui/material";
 
 function CreatePost() {
     const navigate = useNavigate();
@@ -45,23 +46,48 @@ function CreatePost() {
             mode: "cors"
         }
         let res = await fetch('/api/post/create', requestOptions)
-        if(res.ok){
+        if (res.ok) {
             const res_body = await res.json();
             navigate("/post/" + res_body.post_id)
         }
-       
+
     }
 
 
     return (
-        <div>
-            <form onSubmit={onSubmit}>
-                <input placeholder="Title" type="string" value={post.title} onChange={handleTitleChange}></input>
-                <input placeholder="Text" type="string" value={post.text} onChange={handleTextChange}></input>
-                <input placeholder="Code snippet" type="string" value={post.code} onChange={handleCodeChange}></input>
-                <button type="submit">Post</button>
-            </form>
-        </div>
+        <Box component="form" sx={{ width: '80%', maxWidth: 'sm', m: "auto" }} onSubmit={onSubmit}>
+            <TextField required
+                margin="normal"
+                fullWidth
+                id="outlined-required"
+                placeholder="Title"
+                type="string"
+                value={post.title}
+                onChange={handleTitleChange}>
+            </TextField>
+            <TextField required
+                margin="normal"
+                fullWidth
+                multiline
+                rows={4}
+                id="outlined-multiline-static"
+                placeholder="Text"
+                type="string"
+                value={post.text}
+                onChange={handleTextChange}>
+            </TextField>
+            <TextField required
+                margin="normal"
+                fullWidth
+                multiline
+                rows={10}
+                id="outlined-multiline-static"
+                placeholder="Code snippet"
+                type="string"
+                value={post.code}
+                onChange={handleCodeChange}></TextField>
+            <Button variant="contained" className="center-align" type="submit">Post</Button>
+        </Box>
     );
 }
 

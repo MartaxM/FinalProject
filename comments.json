@@ -1,0 +1,37 @@
+[{
+  "_id": {
+    "$oid": "64037a2700444e986f7505d8"
+  },
+  "comment_user": {
+    "$oid": "640475191cbfabad1566e86d"
+  },
+  "text": "Can you do it with a while? I don't know how to use it",
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "6404bd281cbfabad1566ec48"
+  },
+  "comment_user": {
+    "$oid": "6403c5ca948bc325f5e8ef47"
+  },
+  "text": "What?",
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "6404bd491cbfabad1566ec5b"
+  },
+  "comment_user": {
+    "$oid": "6403c5ca948bc325f5e8ef47"
+  },
+  "text": "I don't like this at all!",
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "6404bf3d1cbfabad1566ecbf"
+  },
+  "comment_user": {
+    "$oid": "64036ad114cd397e43931f4c"
+  },
+  "text": "dude you forgot (req,res) on the function",
+  "__v": 0
+}]

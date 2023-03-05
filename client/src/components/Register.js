@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom"
+import { TextField, Button, Box } from "@mui/material";
 
 function Register() {
 
@@ -45,9 +46,11 @@ function Register() {
             mode: "cors"
         }
         fetch('/api/user/register', requestOptions)
-            .then(response => {if (response.ok ) {
-                navigate("/login");
-            }})
+            .then(response => {
+                if (response.ok) {
+                    navigate("/login");
+                }
+            })
     }
 
 
@@ -58,14 +61,30 @@ function Register() {
     }
 
     return (
-        <div id="register">
-            <form onSubmit={onSubmit}>
-                <input placeholder="Username" type="string" value={user.username} onChange={handleUsernameChange}></input>
-                <input placeholder="Email" type="email" value={user.email} onChange={handleEmailChange}></input>
-                <input placeholder="Password" type="password" value={user.password} onChange={handlePasswordChange}></input>
-                <button type="submit">Register</button>
-            </form>
-        </div>
+        <Box component="form" sx={{ width: '80%', maxWidth: 'sm',m:"auto" }} onSubmit={onSubmit}>
+            <TextField required
+                margin="normal"
+                fullWidth
+                id="outlined-required"
+                placeholder="Username"
+                type="string" value={user.username}
+                onChange={handleUsernameChange}></TextField>
+            <TextField required
+                margin="normal"
+                fullWidth
+                id="outlined-required"
+                placeholder="Email"
+                type="email" value={user.email}
+                onChange={handleEmailChange}></TextField>
+            <TextField required
+                margin="normal"
+                fullWidth
+                id="outlined-required"
+                placeholder="Password"
+                type="password" value={user.password}
+                onChange={handlePasswordChange}></TextField>
+            <Button variant="contained" className="center-align" type="submit">Register</Button>
+        </Box>
     );
 }
 

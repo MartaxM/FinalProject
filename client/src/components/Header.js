@@ -2,32 +2,46 @@ import React from 'react';
 import AppBar from '@mui/material/AppBar'
 import Button from '@mui/material/Button'
 import { Box, Toolbar } from '@mui/material';
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 
 const Header = () => {
-    let navigate = useNavigate();
+    const [logged, setLogged] = useState(false);
 
-    const logOut = (e) => {
+    useEffect(() => {
+        let mounted = true;
+        const requestOptions = {
+            method: 'GET',
+            mode: "cors"
+        }
+        async function fetchLoggingState() {
+            let res = await fetch("/api/user/logged_in", requestOptions)
+                .catch((e) => {
+                    console.log(e);
+                })
+            if (mounted) {
+                console.log(res.ok)
+                setLogged(res.ok)
+            }
+        }
+
+        fetchLoggingState();
+        return () => { mounted = false; };
+    }, [])
+
+    const logOut = async (e) => {
         e.preventDefault();
-        fetch("/api/user/logout", { method: 'POST' })
-            .then(response => {
-                if (response.ok) {navigate("/");}
-            })
+        let res = await fetch("/api/user/logout", { method: 'POST' })
+
+        if (res.ok) { window.location.reload(true) }
     }
-    
-    return (
-        <div>
+
+    if (logged) {
+        return (
             <Box sx={{ flexGrow: 1 }}>
                 <AppBar position='static'>
                     <Toolbar>
                         <Button href="/" color='inherit'>
                             Home
-                        </Button>
-                        <Button href="/login" color='inherit'>
-                            Login
-                        </Button>
-                        <Button href="/register" color='inherit'>
-                            Register
                         </Button>
                         <Button href="/write" color='inherit'>
                             Write Post
@@ -35,13 +49,36 @@ const Header = () => {
                         <Button color='inherit' onClick={logOut}>
                             LogOut
                         </Button>
-                        
+
                     </Toolbar>
                 </AppBar>
             </Box>
+        )
+    } else {
+        return (
+            <div>
+                <Box sx={{ flexGrow: 1 }}>
+                    <AppBar position='static'>
+                        <Toolbar>
+                            <Button href="/" color='inherit'>
+                                Home
+                            </Button>
+                            <Button href="/login" color='inherit'>
+                                Login
+                            </Button>
+                            <Button href="/register" color='inherit'>
+                                Register
+                            </Button>
+                        </Toolbar>
+                    </AppBar>
+                </Box>
 
-        </div>
-    )
+            </div>
+        )
+    }
+
+
+
 }
 
 export default Header

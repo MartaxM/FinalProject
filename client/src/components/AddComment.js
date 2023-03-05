@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { TextField, Button, Box } from "@mui/material";
 
 function AddComment(props) {
     const [comment, setComment] = useState({ text: "" });
@@ -11,7 +12,7 @@ function AddComment(props) {
         });
     }
 
-    const onSubmit = async(e) => {
+    const onSubmit = async (e) => {
         e.preventDefault();
         const requestOptions = {
             method: 'POST',
@@ -21,22 +22,28 @@ function AddComment(props) {
             }),
             mode: "cors"
         }
-        await fetch('/api/post/'+post_id+'/comment/create', requestOptions).catch((err)=>console.log(err))
-        
-        // if(res.ok){
-        //     const res_body = await res.json();
-        //     navigate("/post/" + res_body.post_id)
-        // }
+        const res = await fetch('/api/post/' + post_id + '/comment/create', requestOptions).catch((err) => console.log(err))
+
+        if (res.ok) {
+            window.location.reload(true)
+        }
     }
 
-
     return (
-        <div>
-            <form onSubmit={onSubmit}>
-                <input placeholder="Your comment here" type="string" value={comment.text} onChange={handleTextChange}></input>
-                <button type="submit" onClick={() => window.location.reload(true)}>Comment</button>
-            </form>
-        </div>
+        <Box component="form" sx={{ width: '80%', maxWidth: 'sm', m: "auto", mt: 2 }} onSubmit={onSubmit}>
+            <TextField
+                fullWidth
+                required
+                margin="normal"
+                multiline
+                id="outlined-multiline-static"
+                rows={4}
+                placeholder="Your comment here"
+                type="string" value={comment.text}
+                onChange={handleTextChange}>
+            </TextField>
+            <Button type="submit" variant="contained" className="center-align">Comment</Button>
+        </Box>
     );
 }
 
